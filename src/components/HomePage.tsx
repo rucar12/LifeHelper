@@ -95,7 +95,7 @@ const HomePage: React.FC = () => {
             </div>
             <p className={styles.linkToGenApi}>
                 Open &nbsp;
-                <a target="_blank" href={'https://platform.openai.com/account/api-keys'}>
+                <a target="_blank" href={'https://platform.openai.com/account/api-keys'} rel={'noreferrer'}>
                     this link
                 </a>
                 &nbsp; to generate api key
