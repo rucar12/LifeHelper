@@ -2,7 +2,14 @@ import styles from './Upload.module.scss';
 import DeleteSVG from '@/assets/images/delete.svg'
 import Image from "next/image";
 
-const Upload = ({onClick, onDrop, onClear, name}) => {
+type iProps = {
+    onClick: any,
+    onDrop: (event: any) => void,
+    onClear: () => void,
+    name: string | null,
+}
+
+const Upload = ({onClick, onDrop, onClear, name}: iProps) => {
 
     return (
         <div

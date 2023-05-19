@@ -1,4 +1,4 @@
-export const getMessages = (apiRequestBody, API_KEY) => { // messages is an array of messages
+export const getMessages = (apiRequestBody: any, API_KEY: string | null) => { // messages is an array of messages
 
     return fetch("https://api.openai.com/v1/chat/completions",
         {
