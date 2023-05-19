@@ -2,6 +2,8 @@ import styles from './Button.module.scss';
 import classNames from "classnames";
 import {ReactNode} from "react";
 import Loader from "@/components/Loader";
+import {useSnapshot} from "valtio";
+import {state} from "@/store";
 
 type iProps = {
     className?: string,
@@ -12,7 +14,7 @@ type iProps = {
 
 const Button = ({className, onClick, children, isLoading}:iProps) => {
 
-    const theme = localStorage.getItem('theme');
+    const {theme} = useSnapshot(state);
 
     return (
         <button
