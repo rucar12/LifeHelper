@@ -1,0 +1,71 @@
+.accordion {
+  border: 1px solid grey;
+  border-radius: 15px;
+
+  .greenPoint, .redPoint {
+    min-width: 15px;
+    min-height: 15px;
+    border-radius: 15px;
+    transition: 1s all;
+  }
+
+  .greenPoint {
+    background: green;
+  }
+
+  .redPoint {
+    background: red;
+  }
+
+  .arrow {
+    transition: 0.4s all;
+
+    &.opened {
+      rotate: 90deg;
+      border: none;
+    }
+  }
+
+  .question {
+    display: flex;
+    gap: 20px;
+    padding: 10px 20px;
+    border-radius: 15px;
+    color: white;
+    background: black;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .disabled {
+    background: grey;
+  }
+
+  .opened {
+    border-bottom: 1px solid grey;
+    border-radius: 15px 15px 0 0;
+  }
+
+  .answerContainer {
+    transition: 1s all;
+    padding: 10px 20px;
+    border-radius: 0 0 15px 15px;
+    min-height: 50px;
+    color: white;
+    background: black;
+
+    .answer {
+      display: flex;
+      flex-direction: column;
+
+      &:last-child {
+        align-items: end;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+    }
+  }
+}

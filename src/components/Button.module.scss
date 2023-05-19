@@ -1,0 +1,19 @@
+.button {
+  border-radius: 5px;
+  border: grey 1px solid;
+  background: white;
+  transition: 0.3s all;
+  min-width: 40px;
+  padding: 0 4px;
+  min-height: 26px;
+
+  &:hover {
+    background: black;
+    color: white;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}

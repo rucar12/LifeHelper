@@ -1,0 +1,17 @@
+.downloadFile {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  padding: 10px 12px;
+  border-radius: 25px;
+  transition: 0.4s all;
+  cursor: pointer;
+  border: 1px solid black;
+  background: white;
+
+  &:hover {
+    border: 1px solid white;
+    background: grey;
+
+  }
+}

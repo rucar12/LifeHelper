@@ -1,0 +1,47 @@
+.home {
+
+  .apiContainer {
+    width: 50%;
+    margin: 10px auto 0;
+    display: flex;
+    gap: 16px;
+
+    .apiInput {
+      width: 85%;
+    }
+
+    .saveBtn {
+      width: 13%;
+    }
+  }
+
+  .linkToGenApi {
+    margin-top: 6px;
+    text-align: center;
+    font-size: 12px;
+
+    a {
+      text-decoration: underline;
+    }
+  }
+
+  .inputUpload {
+    display: none;
+  }
+
+  .questions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .not_found {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    padding: 30px;
+  }
+
+}
