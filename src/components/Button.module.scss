@@ -6,6 +6,7 @@
   min-width: 40px;
   padding: 0 4px;
   min-height: 26px;
+  cursor: pointer;
 
   &:hover {
     background: black;
@@ -15,5 +16,14 @@
   svg {
     width: 20px;
     height: 20px;
+  }
+}
+
+.dark {
+  background: #1f1f1f;
+
+  &:hover {
+    background: white;
+    color: black;
   }
 }

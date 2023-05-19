@@ -22,11 +22,24 @@
   }
 
   input {
+    border-radius: 5px;
     border: none;
-    border-radius: 15px;
     width: 100%;
     outline: none;
     padding: 5px;
     z-index: 2;
+  }
+}
+
+.dark {
+  background: #1f1f1f;
+
+  .label {
+    background: #1f1f1f;
+    color: #636363;
+  }
+
+  input {
+    background: #1f1f1f;
   }
 }
