@@ -9,7 +9,7 @@ import Upload from "@/components/Upload";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Download from "@/components/Download";
-
+//@ts-ignore
 import FileDownload from 'react-file-download';
 import mammoth from 'mammoth';
 
@@ -19,7 +19,7 @@ export type iQuestion = {
 }
 
 const HomePage: React.FC = () => {
-    const [questions, setQuestions] = useState<[iQuestion]>([]);
+    const [questions, setQuestions] = useState<[iQuestion] | null>(null);
     const [file, setFile] = useState<string | null>(null);
     const [apiKey, setApiKey] = useState<string>('');
 
@@ -27,9 +27,12 @@ const HomePage: React.FC = () => {
 
     const uploadFileHandler = (event: ChangeEvent<HTMLInputElement | HTMLDivElement>) => {
         event.preventDefault();
-        if ((event.target.files && event.target.files.length) || event.dataTransfer?.files) {
-            setQuestions([]);
-            const file = event?.dataTransfer?.files[0] ?? event.target?.files[0];
+        const inputElement = event.target as HTMLInputElement;
+        const divElement = event as any;
+        if ((inputElement.files && inputElement.files.length) || divElement.dataTransfer?.files) {
+            setQuestions(null);
+            //@ts-ignore
+            const file = divElement?.dataTransfer?.files[0] ?? inputElement?.files[0];
             setFile(file.name);
             const reader = new FileReader();
             reader.onload = (event) => {
@@ -40,23 +43,24 @@ const HomePage: React.FC = () => {
                 const worksheet = workbook.Sheets[sheetName];
                 const data = XLSX.utils.sheet_to_json(worksheet, {header: 1});
                 const flatData = data
-                    .flatMap((question) => question)
-                    .map((question) => (
+                    .flatMap((question: []) => question)
+                    .map((question: string) => (
                         {
                             question,
                             answer: ''
                         }));
-                setQuestions((prevState) => [...prevState, ...flatData]);
+                //@ts-ignore
+                setQuestions((prevState: iQuestion[] | null) => [...(prevState || []), ...flatData]);
             };
             reader.readAsBinaryString(file);
         }
     }
 
     const downloadWordDocument = () => {
-        const questionsForDownload = questions.filter(question => !!question.answer);
+        const questionsForDownload = questions?.filter((question: iQuestion) => !!question.answer);
         const question = `<p><strong>Question:</strong></p>`;
         const answer = `<p><strong>Answer:</strong></p>`;
-        const docxData = questionsForDownload.map(item => `\n${question} \n\n ${item.question}. \n ${answer} \n ${item.answer} \n`);
+        const docxData = !!questionsForDownload && questionsForDownload.map(item => `\n${question} \n\n ${item.question}. \n ${answer} \n ${item.answer} \n`);
 
         try {
             FileDownload(docxData, `Answers_${new Date().toLocaleString()}.docx`);
@@ -65,11 +69,11 @@ const HomePage: React.FC = () => {
         }
     }
 
-    const hasFilledAnswer = questions.some(item => !!item.answer);
+    const hasFilledAnswer = questions?.some(item => !!item.answer);
 
     const clearHandler = () => {
         setFile(null);
-        setQuestions([]);
+        setQuestions(null);
     }
 
     const saveApi = () => {
@@ -81,7 +85,7 @@ const HomePage: React.FC = () => {
         }
     }
 
-    const API_KEY = localStorage.getItem('token');
+    const API_KEY = () => localStorage.getItem('token');
 
     return (
         <section className={styles.home}>
@@ -114,16 +118,16 @@ const HomePage: React.FC = () => {
                 accept={'.xlsx'}
                 className={styles.inputUpload}
             />
-            <div className={!!questions.length ? styles.questions : styles.not_found}>
-                {!!questions.length
+            <div className={!!questions?.length ? styles.questions : styles.not_found}>
+                {!!questions?.length
                     ? <>
                         <h2>Questions list:</h2>
                         {questions.map(({question, answer}) => {
                             return <Accordion
                                 key={question}
                                 question={question}
-                                disabled={!API_KEY}
-                                apiKey={API_KEY}
+                                disabled={!API_KEY()}
+                                apiKey={API_KEY()}
                                 answer={answer}
                                 setQuestions={setQuestions}
                             />

@@ -1,8 +1,11 @@
 {
   "name": "life-helper",
+  "homepage": "https://rucar12.github.io/LifeHelper/",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -23,5 +26,8 @@
     "sass": "^1.62.1",
     "typescript": "5.0.4",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }

@@ -6,13 +6,14 @@ import classNames from "classnames";
 import {getMessages} from "@/api";
 import Button from "@/components/Button";
 import Loader from "@/components/Loader";
+import {iQuestion} from './HomePage';
 
 type iProps = {
     question: string,
-    apiKey: string,
+    apiKey: string | null,
     answer?: string,
     disabled?: boolean,
-    setQuestions: (iQuestion) => void,
+    setQuestions: (value: [iQuestion] | null) => void,
 }
 
 
@@ -35,8 +36,9 @@ const Accordion = ({question, apiKey, answer, setQuestions, disabled}: iProps) =
                 }
 
                 getMessages(apiRequestBody, apiKey)
-                    .then(data => {
-                        setQuestions(prev => prev.map((item) => item.question === question ? {question, answer: data} : item));
+                    .then((data: string) => {
+                        //@ts-ignore
+                        setQuestions((prev: [iQuestion]) => prev.map((item) => item.question === question ? {question, answer: data} : item));
                     })
                     .catch(() => {
                         //setAnswer('Invalid API KEY!')
@@ -57,8 +59,9 @@ const Accordion = ({question, apiKey, answer, setQuestions, disabled}: iProps) =
         }
 
         getMessages(apiRequestBody, apiKey)
-            .then(data => {
-                setQuestions(prev => {
+            .then((data: string) => {
+                //@ts-ignore
+                setQuestions((prev: [iQuestion]) => {
                     return prev.map((item) => item.question === question ? {question, answer: item.answer + '\n' + data} : item)
                 });
             })
