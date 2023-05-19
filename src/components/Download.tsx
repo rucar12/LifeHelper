@@ -1,6 +1,8 @@
 import styles from './Download.module.scss';
 import React from "react";
 import classNames from "classnames";
+import {useSnapshot} from "valtio";
+import {state} from "@/store";
 
 type iProp = {
     className?: string,
@@ -9,7 +11,7 @@ type iProp = {
 
 const Download = ({onClick, className}: iProp) => {
 
-    const theme = localStorage.getItem('theme');
+    const {theme} = useSnapshot(state);
 
     return (
         <div

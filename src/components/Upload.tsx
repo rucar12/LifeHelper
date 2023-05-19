@@ -2,6 +2,8 @@ import styles from './Upload.module.scss';
 import DeleteSVG from '@/assets/images/delete.svg'
 import Image from "next/image";
 import classNames from "classnames";
+import {useSnapshot} from "valtio";
+import {state} from "@/store";
 
 type iProps = {
     onClick: any,
@@ -12,7 +14,7 @@ type iProps = {
 
 const Upload = ({onClick, onDrop, onClear, name}: iProps) => {
 
-    const theme = localStorage.getItem('theme');
+    const {theme} = useSnapshot(state);
 
     return (
         <div
