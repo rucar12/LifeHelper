@@ -9,17 +9,18 @@
   border: 1px solid black;
   background: white;
 
+  @media (prefers-color-scheme: dark) {
+    background: #1f1f1f;
+  }
+
   &:hover {
     border: 1px solid white;
     background: grey;
-  }
-}
 
-.dark {
-  background: #1f1f1f;
-
-  &:hover {
-    border: 1px solid grey;
-    background: #363636;
+    @media (prefers-color-scheme: dark) {
+      border: 1px solid grey;
+      background: #363636;
+    }
   }
+
 }

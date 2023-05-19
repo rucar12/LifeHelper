@@ -12,6 +12,10 @@
   gap: 15px;
   flex-direction: column;
 
+  @media (prefers-color-scheme: dark) {
+    background: #1f1f1f;
+  }
+
   .general_info {
     display: flex;
     align-items: center;
@@ -29,20 +33,16 @@
     padding: 2px 5px;
     z-index: 10;
 
-    img {
-      width: 16px;
+    @media (prefers-color-scheme: dark) {
+      background: #1f1f1f;
     }
-  }
-}
 
-.dark {
-  background: #1f1f1f;
+    svg {
+      fill: #363636;
 
-  button {
-    background: #1f1f1f;
-
-    img {
-      filter: hue-rotate(90deg);
+      @media (prefers-color-scheme: dark) {
+        fill: #636363;
+      }
     }
   }
 }

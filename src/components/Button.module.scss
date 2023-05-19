@@ -8,22 +8,22 @@
   min-height: 26px;
   cursor: pointer;
 
+  @media (prefers-color-scheme: dark) {
+    background: #1f1f1f;
+  }
+
   &:hover {
     background: black;
     color: white;
+
+    @media (prefers-color-scheme: dark) {
+      background: white;
+      color: black;
+    }
   }
 
   svg {
     width: 20px;
     height: 20px;
-  }
-}
-
-.dark {
-  background: #1f1f1f;
-
-  &:hover {
-    background: white;
-    color: black;
   }
 }

@@ -1,7 +1,5 @@
 import styles from './Input.module.scss';
 import classNames from "classnames";
-import {useSnapshot} from "valtio";
-import {state} from "@/store";
 
 type iProps = {
     value: string | number;
@@ -12,13 +10,8 @@ type iProps = {
 
 const Input = ({placeholder, value, setValue, className}: iProps) => {
 
-    const {theme} = useSnapshot(state);
-
     return (
-        <div className={classNames(styles.input, className, {
-                [styles.dark]: theme === 'dark'
-            }
-        )}>
+        <div className={classNames(styles.input, className)}>
             <label
                 htmlFor={'apiKey'}
                 className={classNames(styles.label, {
