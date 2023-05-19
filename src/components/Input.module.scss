@@ -1,0 +1,32 @@
+.input {
+  border-radius: 5px;
+  border: 1px grey solid;
+  background: white;
+  position: relative;
+
+  .label {
+    position: absolute;
+    top: -7.5px;
+    background: white;
+    color: grey;
+    padding: 0 5px;
+    margin-left: 10px;
+    transition: 0.3s all;
+    opacity: 1;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+
+  .invisible {
+    opacity: 0;
+  }
+
+  input {
+    border: none;
+    border-radius: 15px;
+    width: 100%;
+    outline: none;
+    padding: 5px;
+    z-index: 2;
+  }
+}

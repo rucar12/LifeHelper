@@ -1,0 +1,36 @@
+.upload {
+  margin: 20px auto;
+  width: 50%;
+  height: 150px;
+  border: 1px grey dashed;
+  border-radius: 10px;
+  background: white;
+  color: grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-direction: column;
+
+  .general_info {
+    display: flex;
+    align-items: center;
+  }
+
+  .helper {
+    font-size: 12px;
+  }
+
+  button {
+    border: black;
+    border-radius: 15px;
+    background: white;
+    color: black;
+    padding: 2px 5px;
+    z-index: 10;
+
+    img {
+      width: 16px;
+    }
+  }
+}
