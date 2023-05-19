@@ -12,6 +12,14 @@
   &:hover {
     border: 1px solid white;
     background: grey;
+  }
+}
 
+.dark {
+  background: #1f1f1f;
+
+  &:hover {
+    border: 1px solid grey;
+    background: #363636;
   }
 }

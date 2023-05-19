@@ -10,12 +10,17 @@ type iProps = {
 
 const Input = ({placeholder, value, setValue, className}: iProps) => {
 
+    const theme = localStorage.getItem('theme');
+
     return (
-        <div className={classNames(styles.input, className)}>
+        <div className={classNames(styles.input, className, {
+                [styles.dark]: theme === 'dark'
+            }
+        )}>
             <label
                 htmlFor={'apiKey'}
                 className={classNames(styles.label, {
-                    [styles.invisible]: !value
+                    [styles.invisible]: !value,
                 })}>
                 {placeholder}
             </label>

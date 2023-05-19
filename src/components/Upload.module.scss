@@ -34,3 +34,15 @@
     }
   }
 }
+
+.dark {
+  background: #1f1f1f;
+
+  button {
+    background: #1f1f1f;
+
+    img {
+      filter: hue-rotate(90deg);
+    }
+  }
+}

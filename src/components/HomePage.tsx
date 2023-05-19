@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
     const [questions, setQuestions] = useState<[iQuestion] | null>(null);
     const [file, setFile] = useState<string | null>(null);
     const [apiKey, setApiKey] = useState<string>('');
-
+    const theme = localStorage.getItem('theme');
     const inputRef = useRef<null | HTMLInputElement>(null);
 
     const uploadFileHandler = (event: ChangeEvent<HTMLInputElement | HTMLDivElement>) => {

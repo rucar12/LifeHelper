@@ -9,9 +9,13 @@ type iProp = {
 
 const Download = ({onClick, className}: iProp) => {
 
+    const theme = localStorage.getItem('theme');
+
     return (
         <div
-            className={classNames(styles.downloadFile, className)}
+            className={classNames(styles.downloadFile, className, {
+                [styles.dark]: theme === 'dark'
+            })}
             onClick={onClick}
             title={'Download doc file'}
         >

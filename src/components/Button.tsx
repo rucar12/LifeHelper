@@ -12,9 +12,13 @@ type iProps = {
 
 const Button = ({className, onClick, children, isLoading}:iProps) => {
 
+    const theme = localStorage.getItem('theme');
+
     return (
         <button
-            className={classNames(styles.button, className)}
+            className={classNames(styles.button, className, {
+                [styles.dark]: theme === 'dark'
+            })}
             onClick={onClick}
         >
             {isLoading ? <Loader /> : children}
