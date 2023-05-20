@@ -1,8 +1,6 @@
 'use client'
 
 import styles from './Layout.module.scss';
-import logo from '/src/app/lifeHelper192x192.png';
-import Image from "next/image";
 import classNames from "classnames";
 import {useState} from "react";
 import Settings from "@/components/Settings";
@@ -15,7 +13,7 @@ const Layout = () => {
         <div className={styles.layout}>
             <header className={styles.header}>
                 <div>
-                    <Image alt={'logo'} src={logo} width={50}/>
+                    <img alt={'logo'} src={'/lifeHelper192x192.png'} width={50}/>
                 </div>
                 <p className={styles.siteName}>Life Helper</p>
                 <button
