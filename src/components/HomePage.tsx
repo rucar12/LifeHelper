@@ -1,6 +1,6 @@
 'use client'
 
-import React, {ChangeEvent, useRef, useState} from "react";
+import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 
 import Accordion from "@/components/Accordion";
 
@@ -12,6 +12,10 @@ import Download from "@/components/Download";
 //@ts-ignore
 import FileDownload from 'react-file-download';
 import mammoth from 'mammoth';
+import {useSnapshot} from "valtio";
+import {state} from "@/store";
+import {getMessages} from "@/api";
+import {formatTime} from "@/helpers";
 
 export type iQuestion = {
     question: string,
@@ -19,9 +23,15 @@ export type iQuestion = {
 }
 
 const HomePage: React.FC = () => {
+
+    const {timesContinue, findAutomatic, findWithExample} = useSnapshot(state);
+
+    const timerRef = useRef(0);
+
     const [questions, setQuestions] = useState<[iQuestion] | null>(null);
     const [file, setFile] = useState<string | null>(null);
     const [apiKey, setApiKey] = useState<string>('');
+    const [allDisabled, setAllDisabled] = useState<boolean>(false);
     const inputRef = useRef<null | HTMLInputElement>(null);
 
     const uploadFileHandler = (event: ChangeEvent<HTMLInputElement | HTMLDivElement>) => {
@@ -68,7 +78,86 @@ const HomePage: React.FC = () => {
         }
     }
 
+    const startAutoFind = async () => {
+        setAllDisabled(true);
+        //@ts-ignore
+        for (let i = 0; i < questions?.length; i++) {
+            if (allDisabled) {
+                break;
+            }
+            //@ts-ignore
+            const { question } = !!questions[i];
+            let apiMessages = { role: 'user', content: question };
+            let apiRequestBody = {
+                model: 'gpt-3.5-turbo',
+                messages: [apiMessages],
+            };
+
+            try {
+                await new Promise((resolve) => setTimeout(resolve, 10000));
+                const data = await getMessages(apiRequestBody, API_KEY());
+                //@ts-ignore
+                setQuestions((prev) =>
+                    prev?.map((item) =>
+                        item.question === question ? { question, answer: data } : item
+                    )
+                );
+
+                if (timesContinue) {
+                    apiMessages = {
+                        ...apiMessages,
+                        content: `Continue answer for ${question}`,
+                    };
+
+                    for (let j = 0; j < timesContinue; j++) {
+                        await new Promise((resolve) => setTimeout(resolve, 15000));
+
+                        const continueData = await getMessages(apiRequestBody, API_KEY());
+                        //@ts-ignore
+                        setQuestions((prev) =>
+                            prev?.map((item) =>
+                                item.question === question
+                                    ? { question, answer: item.answer + '\n' + continueData }
+                                    : item
+                            )
+                        );
+                    }
+                } else if (findWithExample) {
+                    apiMessages = {
+                        ...apiMessages,
+                        content: `Show example pls for ${question}`,
+                    };
+
+                    await new Promise((resolve) => setTimeout(resolve, 15000));
+
+                    const exampleData = await getMessages(apiRequestBody, API_KEY());
+                    //@ts-ignore
+                    setQuestions((prev) =>
+                        prev?.map((item) =>
+                            item.question === question
+                                ? { question, answer: item.answer + '\n' + exampleData }
+                                : item
+                        )
+                    );
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                if (questions?.length !== undefined && i === questions?.length - 1) {
+                    setAllDisabled(false);
+                }
+            }
+        }
+    };
+
+    const stopAutoFind = () => {
+      setAllDisabled(false);
+    }
+
+    const hasAnswerInEveryObject = questions?.every(item => !!item.answer);
     const hasFilledAnswer = questions?.some(item => !!item.answer);
+
+    const approximateTime = formatTime(30 * (questions?.length !== undefined ? questions?.length : 0) * (timesContinue + 1 + Number(findWithExample)));
 
     const clearHandler = () => {
         setFile(null);
@@ -117,6 +206,28 @@ const HomePage: React.FC = () => {
                 accept={'.xlsx'}
                 className={styles.inputUpload}
             />
+            {findAutomatic && questions?.length && (
+                <div className={styles.autoFind}>
+                    {!allDisabled
+                        ? <div>
+                            <Button
+                                onClick={startAutoFind}
+                                disabled={hasAnswerInEveryObject || !API_KEY()}
+                                title={hasAnswerInEveryObject ? 'All questions have answers' : ''}
+                                className={styles.autoStart}
+                            >
+                                Start auto find
+                            </Button>
+                            <p>Time: {formatTime(timerRef?.current)}</p>
+                            <p>Approximate waiting time: {approximateTime}</p>
+                        </div>
+                        : <div>
+                            <Button onClick={stopAutoFind}>Stop auto find</Button>
+                            <p>Time: {formatTime(timerRef?.current)}</p>
+                        </div>
+                    }
+                </div>
+            )}
             <div className={!!questions?.length ? styles.questions : styles.not_found}>
                 {!!questions?.length
                     ? <>
@@ -125,7 +236,7 @@ const HomePage: React.FC = () => {
                             return <Accordion
                                 key={question}
                                 question={question}
-                                disabled={!API_KEY()}
+                                disabled={(!API_KEY()) || allDisabled}
                                 apiKey={API_KEY()}
                                 answer={answer}
                                 setQuestions={setQuestions}

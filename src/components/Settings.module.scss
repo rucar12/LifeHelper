@@ -1,0 +1,61 @@
+.settings {
+  height: calc(100vh - 60px);
+  border-top: 1px solid grey;
+  box-shadow: -3px 5px 10px black;
+  background: white;
+  width: 190px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 6px 30px;
+
+  @media (prefers-color-scheme: dark) {
+    background: black;
+    box-shadow: -3px 5px 10px white;
+  }
+
+  .categories {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .automaticFind, .continue, .example {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid grey;
+
+      &:last-child {
+        border: none;
+      }
+    }
+
+    .automaticFind {
+
+    }
+
+    .continue {
+
+      .timesContinue {
+        width: 100px;
+      }
+    }
+
+    .example {
+
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+
+    .button {
+      width: 60px;
+    }
+  }
+}

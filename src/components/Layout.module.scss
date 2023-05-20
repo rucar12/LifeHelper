@@ -1,0 +1,64 @@
+.layout {
+  position: relative;
+  z-index: 100;
+
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    align-items: center;
+    border-bottom: grey;
+    box-shadow: 3px 3px 10px black;
+    padding: 0 20px;
+
+    @media (prefers-color-scheme: dark) {
+      box-shadow: -3px 5px 10px white;
+    }
+
+    .siteName {
+      font-size: 30px;
+      font-family: 'Timmana', sans-serif;
+
+      background-image: linear-gradient(45deg, #00D2DC, #A106CD, #CFA804, #CFCF3B);
+      background-clip: text;
+      color: transparent;
+    }
+
+    .settings {
+      background: none;
+      border: none;
+      cursor: pointer;
+
+      svg {
+        transition: 1s all;
+
+        &:hover {
+          fill: grey;
+          color: black;
+        }
+      }
+    }
+
+    .open {
+      svg {
+        rotate: 90deg;
+      }
+    }
+  }
+
+  .settingsBar {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    transition: 1s all;
+  }
+
+  .openedBar {
+    transform: translateX(200px);
+  }
+}

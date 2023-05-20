@@ -3,12 +3,15 @@ import classNames from "classnames";
 
 type iProps = {
     value: string | number;
-    setValue: (value: string) => void,
+    setValue: (value: any) => void,
     placeholder: string,
     className?: string,
+    type?: string,
+    min?: number,
+    disabled?: boolean,
 }
 
-const Input = ({placeholder, value, setValue, className}: iProps) => {
+const Input = ({placeholder, value, setValue, className, min, disabled, type = 'text'}: iProps) => {
 
     return (
         <div className={classNames(styles.input, className)}>
@@ -20,11 +23,21 @@ const Input = ({placeholder, value, setValue, className}: iProps) => {
                 {placeholder}
             </label>
             <input
-                type="text"
+                min={min}
+                type={type}
                 value={value}
                 placeholder={placeholder}
                 name={'apiKey'}
-                onChange={event => setValue(event.target.value)}
+                disabled={disabled}
+                onChange={event => {
+                    if (type === 'number') {
+                        if (event.target.value === '' || /^\d+$/.test(event.target.value)) {
+                            setValue(parseInt(event.target.value, 10));
+                        }
+                    } else if (type !== 'number') {
+                        setValue(event.target.value);
+                    }
+                }}
             />
         </div>
     )

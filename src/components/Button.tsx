@@ -7,15 +7,19 @@ type iProps = {
     className?: string,
     onClick: () => void,
     isLoading?: boolean,
-    children: ReactNode
+    disabled?: boolean,
+    title?: string,
+    children: ReactNode,
 }
 
-const Button = ({className, onClick, children, isLoading}:iProps) => {
+const Button = ({className, onClick, children, isLoading, disabled, title = ''}:iProps) => {
 
     return (
         <button
             className={classNames(styles.button, className)}
             onClick={onClick}
+            disabled={disabled}
+            title={title}
         >
             {isLoading ? <Loader /> : children}
         </button>

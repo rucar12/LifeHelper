@@ -7,6 +7,8 @@ import {getMessages} from "@/api";
 import Button from "@/components/Button";
 import Loader from "@/components/Loader";
 import {iQuestion} from './HomePage';
+import {state} from "@/store";
+import {useSnapshot} from "valtio";
 
 type iProps = {
     question: string,
@@ -18,6 +20,8 @@ type iProps = {
 
 
 const Accordion = ({question, apiKey, answer, setQuestions, disabled}: iProps) => {
+
+    const {findWithExample, timesContinue} = useSnapshot(state);
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -40,8 +44,18 @@ const Accordion = ({question, apiKey, answer, setQuestions, disabled}: iProps) =
                         //@ts-ignore
                         setQuestions((prev: [iQuestion]) => prev.map((item) => item.question === question ? {question, answer: data} : item));
                     })
-                    .catch(() => {
-                        //setAnswer('Invalid API KEY!')
+                    .then(() => {
+                        if (findWithExample) {
+                            const textExample = `Show example pls for ${question}`;
+                            continueHandler(textExample).then(() => setIsLoading(true));
+                        } else if (timesContinue) {
+                            for (let i = 0; i < timesContinue; i++) {
+                                continueHandler().then(() => setIsLoading(true));
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error);
                     })
                     .finally(() => {
                         setIsLoading(false);
@@ -49,10 +63,11 @@ const Accordion = ({question, apiKey, answer, setQuestions, disabled}: iProps) =
             }
         }
     };
-    const continueHandler = async () => {
+    const continueHandler = async (textContinue?: string) => {
+        let textForContinue = textContinue ?? 'Continue answer for';
         setIsLoading(true);
 
-        let apiMessages = { role: 'user', content: `Continue answer for ${question}`};
+        let apiMessages = { role: 'user', content: `${textForContinue} ${question}`};
         const apiRequestBody = {
             "model": "gpt-3.5-turbo",
             "messages": [apiMessages]
@@ -102,15 +117,17 @@ const Accordion = ({question, apiKey, answer, setQuestions, disabled}: iProps) =
                     </svg>
                 </div>
             </div>
-            {isOpen && <div className={styles.answerContainer}>
+            <div className={classNames(styles.answerContainer, {
+                [styles.visible]: isOpen
+            })}>
                 {isLoading && !answer
                     ? <Loader />
                     : <div className={styles.answer}>
                         <pre>{answer}</pre>
-                        <Button onClick={continueHandler} isLoading={isLoading}>Continue</Button>
+                        <Button onClick={continueHandler} isLoading={isLoading} className={styles.continue}>Continue</Button>
                     </div>
                 }
-            </div>}
+            </div>
         </div>
     );
 };
