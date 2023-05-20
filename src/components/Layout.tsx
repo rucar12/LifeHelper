@@ -1,7 +1,7 @@
 'use client'
 
 import styles from './Layout.module.scss';
-import logo from '/public/lifeHelper192x192.png';
+import logo from '/src/app/lifeHelper192x192.png';
 import Image from "next/image";
 import classNames from "classnames";
 import {useState} from "react";
