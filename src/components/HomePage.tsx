@@ -26,13 +26,42 @@ const HomePage: React.FC = () => {
 
     const {timesContinue, findAutomatic, findWithExample} = useSnapshot(state);
 
-    const timerRef = useRef(0);
-
+    const [timer, setTimer] = useState<number>(0);
     const [questions, setQuestions] = useState<[iQuestion] | null>(null);
     const [file, setFile] = useState<string | null>(null);
     const [apiKey, setApiKey] = useState<string>('');
     const [allDisabled, setAllDisabled] = useState<boolean>(false);
+    const allDisabledRef = useRef(allDisabled);
     const inputRef = useRef<null | HTMLInputElement>(null);
+
+    useEffect(() => {
+        allDisabledRef.current = allDisabled;
+    }, [allDisabled]);
+
+    useEffect(() => {
+        let intervalId: any;
+
+        const startTimer = () => {
+            setTimer(0);
+            intervalId = setInterval(() => {
+                setTimer((prevTimer) => prevTimer + 1);
+            }, 1000);
+        };
+
+        const stopTimer = () => {
+            clearInterval(intervalId);
+        };
+
+        if (allDisabled) {
+            startTimer();
+        } else {
+            stopTimer();
+        }
+
+        return () => {
+            stopTimer();
+        };
+    }, [allDisabled]);
 
     const uploadFileHandler = (event: ChangeEvent<HTMLInputElement | HTMLDivElement>) => {
         event.preventDefault();
@@ -82,11 +111,11 @@ const HomePage: React.FC = () => {
         setAllDisabled(true);
         //@ts-ignore
         for (let i = 0; i < questions?.length; i++) {
-            if (allDisabled) {
+            if (!allDisabledRef.current && i !== 0) {
                 break;
             }
             //@ts-ignore
-            const { question } = !!questions[i];
+            const { question } = questions[i];
             let apiMessages = { role: 'user', content: question };
             let apiRequestBody = {
                 model: 'gpt-3.5-turbo',
@@ -108,7 +137,10 @@ const HomePage: React.FC = () => {
                         ...apiMessages,
                         content: `Continue answer for ${question}`,
                     };
-
+                    apiRequestBody = {
+                        ...apiRequestBody,
+                        messages: [apiMessages]
+                    }
                     for (let j = 0; j < timesContinue; j++) {
                         await new Promise((resolve) => setTimeout(resolve, 15000));
 
@@ -127,7 +159,10 @@ const HomePage: React.FC = () => {
                         ...apiMessages,
                         content: `Show example pls for ${question}`,
                     };
-
+                    apiRequestBody = {
+                        ...apiRequestBody,
+                        messages: [apiMessages]
+                    }
                     await new Promise((resolve) => setTimeout(resolve, 15000));
 
                     const exampleData = await getMessages(apiRequestBody, API_KEY());
@@ -214,16 +249,17 @@ const HomePage: React.FC = () => {
                                 onClick={startAutoFind}
                                 disabled={hasAnswerInEveryObject || !API_KEY()}
                                 title={hasAnswerInEveryObject ? 'All questions have answers' : ''}
-                                className={styles.autoStart}
+                                className={styles.autoBtn}
                             >
                                 Start auto find
                             </Button>
-                            <p>Time: {formatTime(timerRef?.current)}</p>
+                            <p>Time: {formatTime(timer)}</p>
                             <p>Approximate waiting time: {approximateTime}</p>
                         </div>
                         : <div>
-                            <Button onClick={stopAutoFind}>Stop auto find</Button>
-                            <p>Time: {formatTime(timerRef?.current)}</p>
+                            <Button onClick={stopAutoFind} className={styles.autoBtn}>Stop auto find</Button>
+                            <p>Time: {formatTime(timer)}</p>
+                            <p>Approximate waiting time: {approximateTime}</p>
                         </div>
                     }
                 </div>
